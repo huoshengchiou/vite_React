@@ -7,8 +7,12 @@ import {
   takeLatest,
   select,
   take,
+  cps,
 } from "redux-saga/effects";
 import axios from "axios";
+// We saw that using Effects like call and put, combined with high-level APIs like takeEvery allows us to achieve the same things as redux-thunk, but with the added benefit of easy testability.
+// handle Node style functions (e.g. fn(...args, callback) where callback is of the form (error, result) => ()). cps stands for Continuation Passing Style.
+// const content = yield cps(readFile, '/path/to/file')
 
 // export function* helloSaga() {
 //   console.log("Hello Sagas!");
@@ -36,7 +40,18 @@ function* fetchUser(action) {
   console.log("執行fetchUser");
 
   try {
+    // Effect -> call the function Api.fetchUser with 'action.payload.userId' as argument
+    // call(fn, ...args) function
+    // {
+    //   CALL: {
+    //     fn: Api.fetchUser,
+    //     args: ['action.payload.userId']
+    //   }
+    // }
     const user = yield call(Api.fetchUser, action.payload.userId);
+    // If the Effect type is a PUT then it will dispatch an action to the Store.
+    // 在saga內的fn會return 一個obj(called effect)
+    // { PUT: {type: "FETCH_POSTS_SUCCESS", payload: user } }
     yield put({ type: "FETCH_POSTS_SUCCESS", payload: user });
   } catch (e) {
     yield put({ type: "USER_FETCH_FAILED", message: e.message });
@@ -44,10 +59,6 @@ function* fetchUser(action) {
 }
 
 // const delay = (ms) => new Promise((res) => setTimeout(res, ms));
-
-const test = () => {
-  console.log("test");
-};
 
 function* doSomeAsync(action) {
   console.log("action", action);
@@ -73,15 +84,45 @@ function* doSomeAsync(action) {
    在每次 dispatch `USER_FETCH_REQUESTED` action 時，啟動 fetchUser。
    允許同時取得使用者。
  */
+
+function* watchAndLog() {
+  while (true) {
+    const action = yield take("*");
+    const state = yield select();
+
+    console.log("action from take", action);
+    console.log("state after from take", state);
+  }
+}
+
 function* mySaga(a, b) {
   yield takeEvery("USER_FETCH_REQUESTED", fetchUser);
   //   takeLatest 在任何時候只允許一個 fetchData task 執行，它將啟動最新的 task。如果先前提供的 task 還在執行，當其他的 fetchData task 被啟動，先前的 task 會自動被取消。
   yield takeLatest("USER_FETCH_REQUESTED_LATEST", doSomeAsync);
-  yield takeEvery("*", function* logger(action) {
-    const state = yield select();
-    console.log("saga logger action", action);
-    console.log("saga logger state after", state);
-  });
+
+  //讓saga主動去pull，take可以map特定的event
+  // take Effect 讓我們可以在一個集中的地方更好的描述一個非同步的流程。
+  while (true) {
+    let action = yield take("LOGIN");
+    // ... 執行登入邏輯
+    console.log("LOGIN", action);
+    yield take("LOGOUT");
+    console.log("LOGOUT");
+    // ... 執行登出邏輯
+  }
+  // while (true) {
+  //   const action = yield take("*");
+  //   const state = yield select();
+
+  //   console.log("action", action);
+  //   console.log("state after", state);
+  // }
+
+  // yield takeEvery("*", function* logger(action) {
+  //   const state = yield select();
+  //   console.log("saga logger action", action);
+  //   console.log("saga logger state after", state);
+  // });
 }
 
 /*

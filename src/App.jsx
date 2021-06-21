@@ -98,6 +98,16 @@ function App() {
         saga LATEST dispatch
       </button>
 
+      <button
+        onClick={() =>
+          dispatch({
+            type: "LOGIN",
+          })
+        }
+      >
+        saga effect test
+      </button>
+
       <h1 style={{ color: color ? "red" : "blue" }}>color</h1>
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
