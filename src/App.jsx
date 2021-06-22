@@ -102,10 +102,21 @@ function App() {
         onClick={() =>
           dispatch({
             type: "LOGIN",
+            name: "jack",
           })
         }
       >
         saga effect test
+      </button>
+
+      <button
+        onClick={() =>
+          dispatch({
+            type: "RUN_MULTIPLE",
+          })
+        }
+      >
+        run mutiple saga
       </button>
 
       <h1 style={{ color: color ? "red" : "blue" }}>color</h1>
