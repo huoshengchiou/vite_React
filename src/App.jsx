@@ -1,9 +1,12 @@
 import React, { useState, Suspense, useEffect } from "react";
+import { BrowserRouter, Route, Link, Switch } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 
+import Home from "./pages/Home";
+import Form from "./pages/Form";
 import logo from "./logo.svg";
 import "./App.css";
 import { MemoizedTitle } from "./Title";
@@ -54,87 +57,98 @@ function App() {
   `;
 
   return (
-    <div className="App">
-      {React.Children.toArray(
-        ["en", "ko", "chi"].map((lang) => (
-          <button onClick={() => handleClick(lang)}>{lang}</button>
-        ))
-      )}
-      <button onClick={() => setBrickColor((pre) => !pre)}>
-        switch brick color
-      </button>
-      <button onClick={() => setColor((pre) => !pre)}>color</button>
-      <button onClick={() => setData((pre) => [1, ...pre])}>data</button>
-      <button onClick={() => dispatch({ type: "INCREMENT" })}>
-        dispatch by +
-      </button>
+    <>
+      {/* 如果沒有使用exact的話，只要path有前面符合就會渲染該組件，例如path="/Message"的話，不論網址是http://localhost:8080/MessageList或http://localhost:8080/MessageList/Content都會當作符合而渲染組件。 */}
+      <Suspense fallback={<div>Home loading...</div>}>
+        <Route path="/home" component={Home} />
+        <Route path="/form" component={Form} />
+      </Suspense>
 
-      {/* action creator 可以回傳一個 function 來取代 action 物件。這樣的話，function creator 就變成一個 thunk。 */}
+      {/* <Route path="/home" exact component={Home} /> */}
+      <div className="App">
+        {React.Children.toArray(
+          ["en", "ko", "chi"].map((lang) => (
+            <button onClick={() => handleClick(lang)}>{lang}</button>
+          ))
+        )}
+        <button onClick={() => setBrickColor((pre) => !pre)}>
+          switch brick color
+        </button>
+        <button onClick={() => setColor((pre) => !pre)}>color</button>
+        <button onClick={() => setData((pre) => [1, ...pre])}>data</button>
+        <button onClick={() => dispatch({ type: "INCREMENT" })}>
+          dispatch by +
+        </button>
 
-      {/* 當一個 action creator 回傳一個 function 的時候，這個 function 將會被 Redux Thunk middleware 執行。這個 function 不需要是 pure 的；因此它被允許一些有 side effect 的動作，包括執行非同步的 API 呼叫。這個 function 也可以 dispatch action—像是那些我們之前定義的同步 action。 */}
-      <button onClick={() => dispatch(callApi("123"))}>
-        call api dispatch
-      </button>
+        {/* action creator 可以回傳一個 function 來取代 action 物件。這樣的話，function creator 就變成一個 thunk。 */}
 
-      {/* 直接dispatch fn 可透過HOC的方式，取得dispatch, getState兩個fn */}
-      <button onClick={() => dispatch(exampleThunkFunction)}>test Thunk</button>
+        {/* 當一個 action creator 回傳一個 function 的時候，這個 function 將會被 Redux Thunk middleware 執行。這個 function 不需要是 pure 的；因此它被允許一些有 side effect 的動作，包括執行非同步的 API 呼叫。這個 function 也可以 dispatch action—像是那些我們之前定義的同步 action。 */}
+        <button onClick={() => dispatch(callApi("123"))}>
+          call api dispatch
+        </button>
 
-      <button
-        onClick={() =>
-          dispatch({ type: "USER_FETCH_REQUESTED", payload: { userId: 123 } })
-        }
-      >
-        saga dispatch
-      </button>
+        {/* 直接dispatch fn 可透過HOC的方式，取得dispatch, getState兩個fn */}
+        <button onClick={() => dispatch(exampleThunkFunction)}>
+          test Thunk
+        </button>
 
-      <button
-        onClick={() =>
-          dispatch({
-            type: "USER_FETCH_REQUESTED_LATEST",
-            payload: { userId: 123 },
-          })
-        }
-      >
-        saga LATEST dispatch
-      </button>
+        <button
+          onClick={() =>
+            dispatch({ type: "USER_FETCH_REQUESTED", payload: { userId: 123 } })
+          }
+        >
+          saga dispatch
+        </button>
 
-      <button
-        onClick={() =>
-          dispatch({
-            type: "LOGIN",
-            name: "jack",
-          })
-        }
-      >
-        saga effect test
-      </button>
+        <button
+          onClick={() =>
+            dispatch({
+              type: "USER_FETCH_REQUESTED_LATEST",
+              payload: { userId: 123 },
+            })
+          }
+        >
+          saga LATEST dispatch
+        </button>
 
-      <button
-        onClick={() =>
-          dispatch({
-            type: "RUN_MULTIPLE",
-          })
-        }
-      >
-        run mutiple saga
-      </button>
+        <button
+          onClick={() =>
+            dispatch({
+              type: "LOGIN",
+              name: "jack",
+            })
+          }
+        >
+          saga effect test
+        </button>
 
-      <h1 style={{ color: color ? "red" : "blue" }}>color</h1>
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>{t("Thanks.1")}</p>
-        <p>{t("why.1")}</p>
-        {/* 引入component還沒有ready前的過場 */}
-        <Suspense fallback={<div>loading...123.</div>}>
-          <Test />
-        </Suspense>
-        標題這裡
-        <MemoizedTitle title={count} data={data} />
-        <CustomDiv />
-        <ExtendDiv />
-        <h1>{`Redux現在的數字是${counterFromRedux}`}</h1>
-      </header>
-    </div>
+        <button
+          onClick={() =>
+            dispatch({
+              type: "RUN_MULTIPLE",
+            })
+          }
+        >
+          run mutiple saga
+        </button>
+
+        <h1 style={{ color: color ? "red" : "blue" }}>color</h1>
+        <header className="App-header">
+          <img src={logo} className="App-logo" alt="logo" />
+          <p>{t("Thanks.1")}</p>
+          <p>{t("why.1")}</p>
+          {/* 引入component還沒有ready前的過場 */}
+          <Suspense fallback={<div>loading...123.</div>}>
+            <Test />
+          </Suspense>
+          標題這裡
+          <MemoizedTitle title={count} data={data} />
+          <CustomDiv />
+          <ExtendDiv />
+          <h1>{`Redux現在的數字是${counterFromRedux}`}</h1>
+        </header>
+      </div>
+    </>
   );
 }
 

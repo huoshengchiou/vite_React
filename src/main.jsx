@@ -1,4 +1,5 @@
 import React, { Suspense } from "react";
+import { BrowserRouter, Route, Link } from "react-router-dom";
 import ReactDOM from "react-dom";
 // redux core //store as globalized state
 import { createStore, applyMiddleware } from "redux";
@@ -55,13 +56,15 @@ const store = createStore(
 sagaMiddleware.run(mySaga);
 
 ReactDOM.render(
-  <Suspense fallback={<div>loading....</div>}>
-    <React.StrictMode>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </React.StrictMode>
-  </Suspense>,
+  <BrowserRouter>
+    <Suspense fallback={<div>loading....</div>}>
+      <React.StrictMode>
+        <Provider store={store}>
+          <App />
+        </Provider>
+      </React.StrictMode>
+    </Suspense>
+  </BrowserRouter>,
   document.getElementById("root")
 );
 
