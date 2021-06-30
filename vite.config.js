@@ -31,3 +31,6 @@ export default defineConfig({
 //     ],
 //   },
 // },
+
+//in windows prevent npm error
+// change /src\/.*\.jsx?$/ to /src\\.*\.[tj]sx?$/
