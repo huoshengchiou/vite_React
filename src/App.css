@@ -45,3 +45,16 @@ button {
   width: 100vw;
   height: 300px;
 }
+
+.container {
+  width: 250px;
+  height: 250px;
+  border: 1px solid teal;
+}
+
+.bar {
+  fill: pink;
+}
+.bar:hover {
+  fill: red;
+}

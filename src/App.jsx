@@ -1,4 +1,4 @@
-import React, { useState, Suspense, useEffect,useRef } from "react";
+import React, { useState, Suspense, useEffect, useRef } from "react";
 import { BrowserRouter, Route, Link, Switch } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
@@ -7,7 +7,8 @@ import axios from "axios";
 
 import Home from "./pages/Home";
 import Form from "./pages/Form";
-import SuspenseTest from './pages/SuspenseTest'
+import SuspenseTest from "./pages/SuspenseTest";
+import ChartTest from "./pages/ChartTest";
 import logo from "./logo.svg";
 import "./App.css";
 import { MemoizedTitle } from "./Title";
@@ -19,7 +20,7 @@ function App() {
   const [count, setCount] = useState(0);
   const [color, setColor] = useState(false);
   const [brickColor, setBrickColor] = useState(true);
-  const scrollPos=useRef(null)
+  const scrollPos = useRef(null);
 
   const counterFromRedux = useSelector((storeState) => storeState.counter); //取其中一個
   const dispatch = useDispatch();
@@ -64,7 +65,8 @@ function App() {
       <Suspense fallback={<div>Home loading...</div>}>
         <Route path="/home" component={Home} />
         <Route path="/form" component={Form} />
-        <Route path="/sus" component={SuspenseTest} />        
+        <Route path="/sus" component={SuspenseTest} />
+        <Route path="/chart-test" component={ChartTest} />
       </Suspense>
 
       {/* <Route path="/home" exact component={Home} /> */}
@@ -82,7 +84,17 @@ function App() {
         <button onClick={() => dispatch({ type: "INCREMENT" })}>
           dispatch by +
         </button>
-        <button onClick={() =>{scrollPos.current.scrollIntoView({behavior: "smooth", block: "center", inline: "center"})}}>scroll</button>
+        <button
+          onClick={() => {
+            scrollPos.current.scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+              inline: "center",
+            });
+          }}
+        >
+          scroll
+        </button>
 
         {/* action creator 可以回傳一個 function 來取代 action 物件。這樣的話，function creator 就變成一個 thunk。 */}
 
@@ -149,8 +161,9 @@ function App() {
           <MemoizedTitle title={count} data={data} />
           <CustomDiv />
           <ExtendDiv />
-          <div className="placeholder-item"><div style={{width:'200px',height:'100px'}}></div></div>
-
+          <div className="placeholder-item">
+            <div style={{ width: "200px", height: "100px" }}></div>
+          </div>
           <h1 ref={scrollPos}>{`Redux現在的數字是${counterFromRedux}`}</h1>
         </header>
       </div>
