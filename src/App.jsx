@@ -48,6 +48,19 @@ function App() {
   //   );
   // }
 
+  const test=(e)=>console.log({e})
+
+
+const imgUpload=()=>{
+  const input = document.createElement('input')
+  input.type='file'
+  input.addEventListener('change',e=>test(e.target))
+  input.click()
+
+}
+
+
+
   //變數在內部
   const CustomDiv = styled.div`
     width: 100px;
@@ -95,6 +108,7 @@ function App() {
         >
           scroll
         </button>
+        {/* <div style={{background:'black',width:'150px',height:'150px'}} onClick={imgUpload}></div> */}
 
         {/* action creator 可以回傳一個 function 來取代 action 物件。這樣的話，function creator 就變成一個 thunk。 */}
 

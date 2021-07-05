@@ -53,7 +53,7 @@ button {
 }
 
 .bar {
-  fill: pink;
+  fill: steelblue;
 }
 .bar:hover {
   fill: red;
