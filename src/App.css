@@ -58,3 +58,25 @@ button {
 .bar:hover {
   fill: red;
 }
+
+.country {
+  fill: #ccc;
+  stroke: #282c34;
+}
+
+.country:hover {
+  stroke: red;
+}
+
+.country::before {
+  content: "";
+  display: block;
+  position: absolute;
+  background: teal;
+}
+
+#draw-edge::before {
+  content: "";
+  position: absolute;
+  background: teal;
+}

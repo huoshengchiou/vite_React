@@ -9,6 +9,7 @@ import Home from "./pages/Home";
 import Form from "./pages/Form";
 import SuspenseTest from "./pages/SuspenseTest";
 import ChartTest from "./pages/ChartTest";
+import Geo from "./pages/GeoTest";
 import logo from "./logo.svg";
 import "./App.css";
 import { MemoizedTitle } from "./Title";
@@ -48,18 +49,14 @@ function App() {
   //   );
   // }
 
-  const test=(e)=>console.log({e})
+  const test = (e) => console.log({ e });
 
-
-const imgUpload=()=>{
-  const input = document.createElement('input')
-  input.type='file'
-  input.addEventListener('change',e=>test(e.target))
-  input.click()
-
-}
-
-
+  const imgUpload = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.addEventListener("change", (e) => test(e.target));
+    input.click();
+  };
 
   //變數在內部
   const CustomDiv = styled.div`
@@ -80,6 +77,7 @@ const imgUpload=()=>{
         <Route path="/form" component={Form} />
         <Route path="/sus" component={SuspenseTest} />
         <Route path="/chart-test" component={ChartTest} />
+        <Route path="/geo" component={Geo} />
       </Suspense>
 
       {/* <Route path="/home" exact component={Home} /> */}
