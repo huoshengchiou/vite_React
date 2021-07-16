@@ -10,6 +10,26 @@ import {
 import { Debug } from "./Debug";
 import * as Yup from "yup";
 
+
+
+//自定義component
+const CustomInputComponent = ({
+  field, // { name, value, onChange, onBlur }
+  form: { touched, errors }, // also values, setXXXX, handleXXXX, dirty, isValid, status, etc.
+  ...props
+}) => (
+  <div style={{border:'1px solid red'}}>
+    <input type="text" {...field} {...props} />
+    {touched[field.name] &&
+      errors[field.name] && <div className="error">{errors[field.name]}</div>}
+  </div>
+);
+
+
+
+
+
+
 const makeValidationSchema = () =>
   Yup.object({
     emailName: Yup.string().email("無效的 Email").required("email 為必填"),
@@ -77,7 +97,7 @@ const Formtest = () => {
         <Formik
           // arr類資料取值name字串調整
           // <Field name="friends[0].email" type="email" placeholder="jane@example.com" /></div>
-          initialValues={{ email: "", friends: [{ name: "", email: "" }],file:null,file1:'' }}
+          initialValues={{ email: "", friends: [{ name: "", email: "" }],file:null,file1:'',customName:'' }}
           validationSchema={Yup.object({
             //array schema 為巢狀
             friends: Yup.array().of(
@@ -97,6 +117,17 @@ const Formtest = () => {
               <Form>
                 {console.log({formik})}
                 <Field name="firstName" placeholder="Jane" />
+                {/* 選單類型 */}
+                <Field as="select" name="color">
+             <option value="red">Red</option>
+             <option value="green">Green</option>
+             <option value="blue">Blue</option>
+           </Field>
+           <Field name="customName" component={CustomInputComponent} placeholder="customName"/>
+
+
+
+
                 <input  name="file" type="file" onChange={(event) => {
                   console.log({upload:event.currentTarget.files[0]})
                  formik.setFieldValue("file", event.currentTarget.files[0]);
