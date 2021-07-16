@@ -77,7 +77,7 @@ const Formtest = () => {
         <Formik
           // arr類資料取值name字串調整
           // <Field name="friends[0].email" type="email" placeholder="jane@example.com" /></div>
-          initialValues={{ email: "", friends: [{ name: "", email: "" }] }}
+          initialValues={{ email: "", friends: [{ name: "", email: "" }],file:null,file1:'' }}
           validationSchema={Yup.object({
             //array schema 為巢狀
             friends: Yup.array().of(
@@ -95,7 +95,14 @@ const Formtest = () => {
           {(formik) => (
             <>
               <Form>
+                {console.log({formik})}
                 <Field name="firstName" placeholder="Jane" />
+                <input  name="file" type="file" onChange={(event) => {
+                  console.log({upload:event.currentTarget.files[0]})
+                 formik.setFieldValue("file", event.currentTarget.files[0]);
+                 formik.setFieldValue("file1", event.currentTarget.files[0].name);
+                }} />
+                {formik.values.file1}
                 <FieldArray name="friends">
                   {({ push, remove }) => (
                     <>
@@ -139,9 +146,10 @@ const Formtest = () => {
                     </>
                   )}
                 </FieldArray>
+                
                 <button type="submit">Submit</button>
                 {/* //直接把form的結構資料顯示出來 */}
-                {/* <Debug /> */}
+                <Debug />
               </Form>
             </>
           )}
