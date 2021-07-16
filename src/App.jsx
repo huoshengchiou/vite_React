@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
+import {reduxFromOutFn}from './testFn'
 
 import Home from "./pages/Home";
 import Form from "./pages/Form";
@@ -16,6 +17,10 @@ import { MemoizedTitle } from "./Title";
 import { callApi, exampleThunkFunction } from "./actions/req";
 
 const Test = React.lazy(() => import("./Test/index"));
+
+
+
+
 
 function App() {
   const [count, setCount] = useState(0);
@@ -32,6 +37,8 @@ function App() {
     console.log(t);
     i18n.changeLanguage(lang);
   };
+
+
 
   // useEffect(() => {
   //   //重要的key必須透過.env檔保存並且不會進到版控
@@ -79,7 +86,7 @@ function App() {
         <Route path="/chart-test" component={ChartTest} />
         <Route path="/geo" component={Geo} />
       </Suspense>
-
+       <Link to={'/sus'}>123</Link>
       {/* <Route path="/home" exact component={Home} /> */}
       <div className="App">
         {React.Children.toArray(
@@ -178,6 +185,7 @@ function App() {
           </div>
           <h1 ref={scrollPos}>{`Redux現在的數字是${counterFromRedux}`}</h1>
         </header>
+        {reduxFromOutFn()}
       </div>
     </>
   );
