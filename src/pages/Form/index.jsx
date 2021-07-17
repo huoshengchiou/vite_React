@@ -97,15 +97,17 @@ const Formtest = () => {
         <Formik
           // arr類資料取值name字串調整
           // <Field name="friends[0].email" type="email" placeholder="jane@example.com" /></div>
-          initialValues={{ email: "", friends: [{ name: "", email: "" }],file:null,file1:'',customName:'' }}
+          initialValues={{ email: "", friends: [{ name: "", email: "" }],file:null,file1:'',customName:'',touchInput:'' }}
           validationSchema={Yup.object({
             //array schema 為巢狀
             friends: Yup.array().of(
               Yup.object({
-                name: Yup.string().required("Required"),
+                name: Yup.string().required("Required").min(2, 'Too Short!'),
                 email: Yup.string().email("Invalid Email").required("Required"),
               })
             ),
+            //required()內可以自定義錯誤字串 min()則是在第二個參數 
+            touchInput:Yup.string().required('error on touch').min(2, 'Too Short!')
           })}
           onSubmit={(values) => {
             console.log(values);
@@ -125,7 +127,11 @@ const Formtest = () => {
            </Field>
            <Field name="customName" component={CustomInputComponent} placeholder="customName"/>
 
-
+           <Field name="touchInput" />
+           {/* 加入touched後，會在游標離開該處後進行驗證顯示錯誤 */}
+           {formik.errors.touchInput && formik.touched.touchInput ? (
+             <div>{formik.errors.touchInput}</div>
+           ) : null}
 
 
                 <input  name="file" type="file" onChange={(event) => {
