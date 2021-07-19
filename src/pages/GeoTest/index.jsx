@@ -20,7 +20,7 @@ const draw = async (select, setSelect) => {
     .translate([width / 2, height / 1.4]);
   //投影後的資料來產生路徑資料
   const path = d3.geoPath(projection);
-
+  //群組tag
   const g = svg.append("g");
 
   const data = await d3.json("/src/data/countries-110m_TOPO.json");
@@ -35,6 +35,12 @@ const draw = async (select, setSelect) => {
     .style("fill", (data) => data.properties.name === `${select}` && "teal")
     .on("click", (e) => setSelect(e.target.dataset.name))
     .attr("d", path);
+
+  //動畫效果，動畫總時間，晚2秒觸發
+  // .transition()
+  // .duration(5000)
+  // .delay(2000)
+  // .style("fill", "black");
 
   console.log({ data: countries.features });
 };

@@ -68,13 +68,6 @@ button {
   stroke: red;
 }
 
-.country::before {
-  content: "";
-  display: block;
-  position: absolute;
-  background: teal;
-}
-
 #draw-edge::before {
   content: "";
   position: absolute;
