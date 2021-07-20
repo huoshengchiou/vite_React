@@ -36,6 +36,37 @@ const makeValidationSchema = () =>
   });
 
 const Formtest = () => {
+
+
+
+  const yupTest=async()=>{
+
+    let schema =  Yup.object({
+      isSpecial: Yup.boolean(),
+      isBig: Yup.boolean(),
+      count: Yup.number().when(['isBig', 'isSpecial'], {
+        // is:  (isBig, isSpecial) => isBig && isSpecial,
+        is:  true,
+        then: Yup.number().min(5),
+        otherwise: Yup.number().min(0),
+      }),
+    });
+    
+    const result=await schema.isValid({
+      isBig: true,
+      isSpecial: false,
+      count: 4,
+    })
+    console.log({result})
+
+  }
+
+  yupTest()
+
+
+
+
+
   //define error (original way)
   const validate = (values) => {
     const errors = {};
