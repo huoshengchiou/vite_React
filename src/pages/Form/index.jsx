@@ -61,10 +61,26 @@ const Formtest = () => {
 
   }
 
-  yupTest()
+  // yupTest()
 
 
+  const yupArrayTest=async()=>{
 
+    let schema =  Yup.object({
+      friends: Yup.array().transform(function (value, originalvalue) {
+        console.log({value, originalvalue})
+        return value
+      })
+    });
+    
+    const result=await schema.isValid({
+      friends:[{name:'jack',age:14}]
+    })
+    console.log({result})
+
+  }
+
+  // yupArrayTest()
 
 
   //define error (original way)
@@ -128,7 +144,7 @@ const Formtest = () => {
         <Formik
           // arr類資料取值name字串調整
           // <Field name="friends[0].email" type="email" placeholder="jane@example.com" /></div>
-          initialValues={{ email: "", friends: [{ name: "", email: "" }],file:null,file1:'',customName:'',touchInput:'' }}
+          initialValues={{ email: "", friends: [{ name: "", email: "" }],file:null,file1:'',customName:'',touchInput:'',dirty:[] }}
           validationSchema={Yup.object({
             //array schema 為巢狀
             friends: Yup.array().of(
@@ -183,6 +199,11 @@ const Formtest = () => {
                                 name={`friends[${index}].name`}
                                 type="text"
                                 placeholder="Jane Doe"
+                                onBlur={(e)=>{
+                                  //同時setting兩個值
+                                  e.currentTarget.value.trim()===''? formik.setFieldValue(`dirty[${index}]`,'c'):formik.setFieldValue(`dirty[${index}]`,index)
+                                  
+                                }}
                               />
                               <ErrorMessage name={`friends[${index}].name`}>
                                 {(msg) => <span>{msg}</span>}
