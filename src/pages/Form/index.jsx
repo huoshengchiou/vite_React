@@ -93,6 +93,31 @@ const Formtest = () => {
     return errors;
   };
 
+  // style={{border:`1px solid ${meta.touched && meta.error&&'red'}`}}
+
+  const MyInput = ({ field, form, ...props }) => {
+    const {name}=field
+    const {errors,touched}=form
+    console.log({field, form,...props})
+    return <input {...field} {...props} style={{border:`1px solid ${errors[name]&&'red'}`}}/>;
+  };
+
+
+
+  const MyRadio=({ field, form, ...props }) => {
+    const {name}=field
+    const {errors,touched,setFieldValue}=form
+    return <input {...field} {...props} style={{border:`1px solid ${errors[name]&&'red'}`}}/>;
+  };
+
+
+  
+  const MyCheck=({ field, form, ...props }) => {
+    const {name}=field
+    const {errors,touched,setFieldValue,isValid}=form
+    return <><input {...field} {...props} style={{border:`1px solid ${errors[name]&&'red'}`}}/><sapn>{!isValid&&'error'}</sapn></>;
+  };
+
   const formik = useFormik({
     initialValues: { emailName: "" },
     // validate,
@@ -144,17 +169,22 @@ const Formtest = () => {
         <Formik
           // arr類資料取值name字串調整
           // <Field name="friends[0].email" type="email" placeholder="jane@example.com" /></div>
-          initialValues={{ email: "", friends: [{ name: "", email: "" }],file:null,file1:'',customName:'',touchInput:'',dirty:[] }}
+          initialValues={{ email: "", friends: [{ name: "", email: "" }],file:null,file1:'',customName:'',touchInput:'',dirty:[],color:'',picked:'',myInput:'',checked:[] }}
           validationSchema={Yup.object({
             //array schema 為巢狀
             friends: Yup.array().of(
               Yup.object({
                 name: Yup.string().required("Required").min(2, 'Too Short!'),
                 email: Yup.string().email("Invalid Email").required("Required"),
+               
               })
             ),
             //required()內可以自定義錯誤字串 min()則是在第二個參數 
-            touchInput:Yup.string().required('error on touch').min(2, 'Too Short!')
+            touchInput:Yup.string().required('error on touch').min(2, 'Too Short!'),
+            picked:Yup.string().required("Required"),
+            myInput:Yup.string().required("Required"),
+            color:Yup.string().required("Required"),
+            checked:Yup.array().min(1,"Required")
           })}
           onSubmit={(values) => {
             console.log(values);
@@ -165,6 +195,7 @@ const Formtest = () => {
             <>
               <Form>
                 {console.log({formik})}
+                <Field name="myInput" placeholder="Doe" component={MyInput} />
                 <Field name="firstName" placeholder="Jane" />
                 {/* 選單類型 */}
                 <Field as="select" name="color">
@@ -173,13 +204,33 @@ const Formtest = () => {
              <option value="blue">Blue</option>
            </Field>
            <Field name="customName" component={CustomInputComponent} placeholder="customName"/>
+           <Field type="radio" name="picked" value="One" />
+           <Field type="radio" name="picked" value="Three" component={MyRadio} />
+
+           <Field type="radio" name="picked" value="Two" />
+
+           <div role="group" aria-labelledby="checkbox-group">
+            <label>
+              <Field type="checkbox" name="checked" value="One" component={MyCheck}/>
+              One
+            </label>
+            <label>
+              <Field type="checkbox" name="checked" value="Two" />
+              Two
+            </label>
+            <label>
+              <Field type="checkbox" name="checked" value="Three" />
+              Three
+            </label>
+          </div>
+
 
            <Field name="touchInput" />
            {/* 加入touched後，會在游標離開該處後進行驗證顯示錯誤 */}
            {formik.errors.touchInput && formik.touched.touchInput ? (
              <div>{formik.errors.touchInput}</div>
            ) : null}
-
+          
 
                 <input  name="file" type="file" onChange={(event) => {
                   console.log({upload:event.currentTarget.files[0]})
@@ -238,7 +289,10 @@ const Formtest = () => {
                 
                 <button type="submit">Submit</button>
                 {/* //直接把form的結構資料顯示出來 */}
+                <div style={{position:'fixed',top:'250px',background:'white'}}>
                 <Debug />
+
+                </div>
               </Form>
             </>
           )}

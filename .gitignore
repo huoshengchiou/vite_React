@@ -6,3 +6,6 @@ dist-ssr
 package-lock.json
 
 .env
+yarn.lock
+package-lock.json
+yarn-error.log

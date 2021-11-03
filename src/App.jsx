@@ -12,6 +12,7 @@ import SuspenseTest from "./pages/SuspenseTest";
 import ChartTest from "./pages/ChartTest";
 import Geo from "./pages/GeoTest";
 import logo from "./logo.svg";
+import XstateRun from "./pages/XstateRun"
 import "./App.css";
 import { MemoizedTitle } from "./Title";
 import { callApi, exampleThunkFunction } from "./actions/req";
@@ -85,6 +86,7 @@ function App() {
         <Route path="/sus" component={SuspenseTest} />
         <Route path="/chart-test" component={ChartTest} />
         <Route path="/geo" component={Geo} />
+        <Route path="/xstate" component={XstateRun} />
       </Suspense>
        <Link to={'/sus'}>123</Link>
       {/* <Route path="/home" exact component={Home} /> */}

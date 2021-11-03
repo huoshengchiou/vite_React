@@ -32,7 +32,7 @@ export const Debug = () => (
             positions: "fixed",
             bottom: "0",
             left:"0",
-            height: "80vh",
+            height: "200px",
             fontSize: ".85rem",
             padding: ".25rem .5rem",
             overflowX: "scroll",
